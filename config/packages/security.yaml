@@ -1,14 +1,29 @@
 security:
     # https://symfony.com/doc/current/security.html#where-do-users-come-from-user-providers
+    encoders:
+#        Symfony\Component\Security\Core\User\User: plaintext
+        Symfony\Component\Security\Core\User\User:
+            algorithm: bcrypt
+            cost: 12
     providers:
-        in_memory: { memory: ~ }
+        in_memory:
+            memory:
+                users:
+                    ryan:
+#                       1234567
+                        password: $2y$12$62hoxhJ8UAWLotnYHwtOBOgIKQmrAclEN0TevWYSK7zGZJMgB/Btq
+                        roles: 'ROLE_USER'
+                    admin:
+#                      123456
+                        password: $2y$12$TFe8rjTIw.xQxBAxmmZRx.HjRm57vtjECuJVLtOim04wqmhyI1b4m
+                        roles: 'ROLE_ADMIN'
     firewalls:
         dev:
             pattern: ^/(_(profiler|wdt)|css|images|js)/
             security: false
         main:
             anonymous: true
-
+            http_basic: ~
             # activate different ways to authenticate
 
             # http_basic: true
@@ -22,3 +37,5 @@ security:
     access_control:
         # - { path: ^/admin, roles: ROLE_ADMIN }
         # - { path: ^/profile, roles: ROLE_USER }
+        # require ROLE_ADMIN for /admin*
+        - { path: ^/admin, roles: ROLE_ADMIN }
